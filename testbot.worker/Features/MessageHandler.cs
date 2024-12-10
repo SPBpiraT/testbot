@@ -1,18 +1,19 @@
 ﻿using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types;
 using Telegram.Bot;
+using testbot.sdk;
 
 namespace testbot.worker.Features
 {
     public class MessageHandler : IHandler<Message>
     {
-        private readonly ITelegramBotClient _botClient; 
-        private readonly MessageService _messageService;
+        private readonly ITelegramBotClient _botClient;
+        private readonly IGreeterGrpcService _grpcService;
 
-        public MessageHandler(ITelegramBotClient botClient, MessageService messageService)
+        public MessageHandler(ITelegramBotClient botClient, IGreeterGrpcService grpcService)
         {
             _botClient = botClient;
-            _messageService = messageService;
+            _grpcService = grpcService;
         }
 
         public async Task Handle(Message message, CancellationToken cancellationToken)
@@ -38,7 +39,7 @@ namespace testbot.worker.Features
 
             if (message.Text == "grpc") 
             {
-                var result = await _messageService.SayHelloAsync("GRPC", cancellationToken);
+                var result = await _grpcService.SayHelloAsync("GRPC", cancellationToken);
                 await _botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: $"{result}",

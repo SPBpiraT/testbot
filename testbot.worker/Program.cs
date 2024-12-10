@@ -7,6 +7,7 @@ using testbot.worker.Options;
 using testbot.sdk;
 
 var builder = Host.CreateApplicationBuilder(args);
+
 builder.Services.AddHostedService<TelegramBotBackgroundService>();
 
 builder.Services.AddTransient<ITelegramBotClient, TelegramBotClient>(serviceProvider =>
@@ -19,7 +20,6 @@ builder.Services.AddTransient<ITelegramBotClient, TelegramBotClient>(serviceProv
 builder.Services.AddGrpcSdk();
 
 builder.Services.AddTransient<IHandler<Message>, MessageHandler>();
-builder.Services.AddScoped<MessageService>();
 
 //”казываем конфигурацию где лежит токен
 builder.Services.Configure<TelegramOptions>(builder.Configuration.GetSection(TelegramOptions.Telegram));

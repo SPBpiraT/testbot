@@ -10,15 +10,14 @@ namespace UserDataService.Grpc.Data
             var dbName = Environment.GetEnvironmentVariable("DB_NAME");
             var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 
-            var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword}";
+            var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};TrustServerCertificate=true";
 
             services.AddDbContext<UserDataContext>(options =>
             {
                 options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Migrations"));
             });
 
-            services.AddScoped(provider =>
-                provider.GetService<UserDataContext>());
+            services.AddScoped<UserDataContext>();
 
             return services;
         }
